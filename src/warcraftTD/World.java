@@ -16,7 +16,8 @@ public class World {
 	//???????????????L'ensembles des tours crees ???????????????????????????????????????????????????
 	static ArrayList<TourArcher> ta = new ArrayList<TourArcher>();
 	static ArrayList<TourBombe> tb = new ArrayList<TourBombe>();
-
+	//?????????????????????????????????????????????????????????????????????????????????????????????
+	static ArrayList<Position> blockedPos = new ArrayList<Position>();
 	// Position par laquelle les monstres vont venir
 	Position spawn;
 
@@ -92,6 +93,7 @@ public class World {
 				for(double x = Position.minX(pos.get(i),pos.get(i+1)); x <= Position.maxX(pos.get(i),pos.get(i+1)) ; x+= squareWidth)
 				{
 					StdDraw.picture(x, pos.get(i).y, "images/DirtTile.png",squareWidth,squareHeight);
+					blockedPos.add(new Position(x,pos.get(i).y));
 				}
 			}
 			if(pos.get(i).y!= pos.get(i+1).y) // ils sont sur la meme ligne horizentale 
@@ -99,10 +101,12 @@ public class World {
 				for(double x = Position.maxY(pos.get(i),pos.get(i+1)); x >= Position.minY(pos.get(i),pos.get(i+1));x -= squareHeight)
 				{
 					StdDraw.picture(pos.get(i).x, x, "images/DirtTile.png",squareWidth,squareHeight);
+					blockedPos.add(new Position(pos.get(i).x,x));
 				}
 			}
 
 		}
+		//System.out.println(blockedPos.toString());
 		StdDraw.setPenColor(StdDraw.RED);
 		StdDraw.filledRectangle(spawn.x, spawn.y, squareWidth /2, squareHeight/2);
 		StdDraw.setPenColor(StdDraw.BLUE);
@@ -142,11 +146,31 @@ public class World {
 		case 'a' : 
 			// TODO Ajouter une image pour représenter une tour d'archers
 		{
+			//montrer une image qui suit le curseur
 			StdDraw.picture(normalizedX, normalizedY, "images/ARCHER SIMPLE.jpg",squareWidth,squareHeight); //0.06
+			//si l'utlisateur a cliqué sur la souris
 			if(StdDraw.isClicked == true ) {
+				//on crée une tour d'archers
 				TourArcher t = new TourArcher(new Position(StdDraw.newX,StdDraw.newY));
+				double distance = 0;
+				//check if pos is not blocked ???????????????????????????????????????????????????????????????????
+				distance = blockedPos.get(0).dist(t.getP());
+				
+				for(Position p: blockedPos)
+				{
+					//calculer la distance minimum  !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					if(p.dist(t.getP())<distance)  distance = p.dist(t.getP()); 
+					
+				}
+				if(distance >= squareWidth/2) {
 				ta.add(t);
 				drawTower('a',squareWidth,squareHeight);
+				} 
+				else 
+				{
+					StdDraw.picture(normalizedX, normalizedY, "images/ARCHER SIMPLE.jpg",squareWidth,squareHeight);
+				}
+				
 			}
 			break;
 		}
@@ -156,8 +180,25 @@ public class World {
 			StdDraw.picture(normalizedX, normalizedY, "images/BOMBE SIMPLE.jpg",squareWidth,squareHeight);
 			if(StdDraw.isClicked == true ) {
 				TourBombe t = new TourBombe(new Position(StdDraw.newX,StdDraw.newY));
-				tb.add(t);
-				drawTower('b',squareWidth,squareHeight);
+				double distance = 0;
+				//check if pos is not blocked ???????????????????????????????????????????????????????????????????
+				distance = blockedPos.get(0).dist(t.getP());
+				
+				for(Position p: blockedPos)
+				{
+					//calculer la distance minimum  !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					if(p.dist(t.getP())<distance)  distance = p.dist(t.getP()); 
+					
+				}
+				if(distance >= squareWidth/2) {
+					tb.add(t);
+					drawTower('b',squareWidth,squareHeight);
+				} 
+				else 
+				{
+					StdDraw.picture(normalizedX, normalizedY, "images/BOMBE SIMPLE.jpg",squareWidth,squareHeight);
+				}
+				
 			}
 			break;
 		}

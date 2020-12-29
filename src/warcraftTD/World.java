@@ -2,9 +2,11 @@ package warcraftTD;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.awt.font.*;
 //import 
 @SuppressWarnings("unused")
 public class World {
@@ -19,15 +21,19 @@ public class World {
 	Position spawn;
 
 	// Information sur la taille du plateau de jeu
-	int width;
-	int height;
-	int nbSquareX;
-	int nbSquareY;
-	double squareWidth;
-	double squareHeight;
+	 int width;
+	 int height;
+	 int nbSquareX;
+	 int nbSquareY;
+	 double squareWidth;
+	 double squareHeight;
+
+	
 
 	// Nombre de points de vie du joueur
 	int life = 20;
+	//Le joueur démarre la partie avec 100 pièces d’or dans sa réserve
+	int or = 100;
 
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	char key;
@@ -62,7 +68,7 @@ public class World {
 	public void drawBackground() {	
 		for (int i = 0; i < nbSquareX; i++)
 			for (int j = 0; j < nbSquareY; j++) 
-				StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "images/grass.png", squareWidth, squareHeight);
+				StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "images/grass2.jpg", squareWidth, squareHeight);
 		// StdDraw.show();
 	}
 
@@ -98,9 +104,9 @@ public class World {
 
 		}
 		StdDraw.setPenColor(StdDraw.RED);
-		StdDraw.filledRectangle(spawn.x, spawn.y, squareWidth / 2, squareHeight / 2);
+		StdDraw.filledRectangle(spawn.x, spawn.y, squareWidth /2, squareHeight/2);
 		StdDraw.setPenColor(StdDraw.BLUE);
-		StdDraw.filledRectangle(p3.x,p3.y, squareWidth / 2, squareHeight / 2);
+		StdDraw.filledRectangle(p3.x,p3.y, squareWidth/2, squareHeight/2);
 	}
 
 	/**
@@ -110,10 +116,17 @@ public class World {
 		//Pour dessiner les points de vie
 		StdDraw.setPenColor(StdDraw.BOOK_RED);
 		double lifePer = (double)life/100; 
-		StdDraw.picture(0.007, 0.1, "images/heart2.png",squareWidth,squareHeight);
-		StdDraw.filledRectangle(0.02+lifePer, 0.1, lifePer , 0.01);
+		StdDraw.picture(0.02, 0.07, "images/heart2.png",squareWidth,squareHeight);
+		StdDraw.filledRectangle(0.05+lifePer, 0.07, lifePer , 0.01);
 		//TODO UNE BOUCLE QUI DIMINUE LE NB DE POINTS DE VIE
 		//Pour dessiner le nb d'or
+		StdDraw.setPenColor(StdDraw.YELLOW);
+		double orPer = (double)or/100; 
+		StdDraw.picture(0.02, 0.02, "images/or.jpg",squareWidth,squareHeight);
+		//StdDraw.text(0.02+orPer, 0.1, String.valueOf(or));
+		StdDraw.text(0.06, 0.02, String.valueOf(or));
+		StdDraw.show();
+		//TODO UNE BOUCLE QUI DIMINUE LE NB DE POINTS DE VIE
 	}
 
 	/**
@@ -129,22 +142,22 @@ public class World {
 		case 'a' : 
 			// TODO Ajouter une image pour représenter une tour d'archers
 		{
-			StdDraw.picture(normalizedX, normalizedY, "images/ARCHER SIMPLE.jpg",0.06,0.06);
+			StdDraw.picture(normalizedX, normalizedY, "images/ARCHER SIMPLE.jpg",squareWidth,squareHeight); //0.06
 			if(StdDraw.isClicked == true ) {
 				TourArcher t = new TourArcher(new Position(StdDraw.newX,StdDraw.newY));
 				ta.add(t);
-				drawTower('a');
+				drawTower('a',squareWidth,squareHeight);
 			}
 			break;
 		}
 		case 'b' :
 		{
 			// TODO Ajouter une image pour représenter une tour à canon
-			StdDraw.picture(normalizedX, normalizedY, "images/BOMBE SIMPLE.jpg",0.06,0.06);
+			StdDraw.picture(normalizedX, normalizedY, "images/BOMBE SIMPLE.jpg",squareWidth,squareHeight);
 			if(StdDraw.isClicked == true ) {
 				TourBombe t = new TourBombe(new Position(StdDraw.newX,StdDraw.newY));
 				tb.add(t);
-				drawTower('b');
+				drawTower('b',squareWidth,squareHeight);
 			}
 			break;
 		}
@@ -155,13 +168,13 @@ public class World {
 	/*
 	 * ????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
 	 */
-	public static void drawTower(char c) 
+	public static void drawTower(char c, double squareWidth , double squareHeight) 
 	{
 		if(c=='a') 
 		{
 			for(TourArcher t: ta) 
 			{
-				StdDraw.picture(t.getP().x, t.getP().y, "images/ARCHER SIMPLE.jpg",0.06,0.06);
+				StdDraw.picture(t.getP().x, t.getP().y, "images/ARCHER SIMPLE.jpg",squareWidth,squareHeight);
 			}
 			// StdDraw.show(); 
 		}
@@ -169,18 +182,18 @@ public class World {
 		{
 			for(TourBombe t: tb) 
 			{
-				StdDraw.picture(t.getP().x, t.getP().y, "images/BOMBE SIMPLE.jpg",0.06,0.06);
+				StdDraw.picture(t.getP().x, t.getP().y, "images/BOMBE SIMPLE.jpg",squareWidth,squareHeight);
 			}
 		}
 		else 
 		{
 			for(TourArcher t: ta) 
 			{
-				StdDraw.picture(t.getP().x, t.getP().y, "images/ARCHER SIMPLE.jpg" ,0.06,0.06);
+				StdDraw.picture(t.getP().x, t.getP().y, "images/ARCHER SIMPLE.jpg" ,squareWidth,squareHeight);
 			}
 			for(TourBombe t: tb) 
 			{
-				StdDraw.picture(t.getP().x, t.getP().y, "images/BOMBE SIMPLE.jpg",0.06,0.06);
+				StdDraw.picture(t.getP().x, t.getP().y, "images/BOMBE SIMPLE.jpg",squareWidth,squareHeight);
 			}
 		}
 	}
@@ -212,7 +225,7 @@ public class World {
 		updateMonsters();
 		drawMouse();
 		//?????????????????????????????????????,YEEEEES
-		drawTower(' ');
+		drawTower(' ',squareWidth,squareHeight);
 		return life;
 	}
 
@@ -227,19 +240,33 @@ public class World {
 		switch (key) {
 		case 'a':
 			//	System.out.println("Arrow Tower selected (50g).");
+			StdDraw.clear(StdDraw.YELLOW_GREEN);
 			StdDraw.text(StdDraw.mouseX(), StdDraw.mouseY(), "Arrow Tower selected (50g).");
 			StdDraw.show();
 			break;
 		case 'b':
 			//	System.out.println("Bomb Tower selected (60g).");
+			StdDraw.clear(StdDraw.YELLOW_GREEN);
+			StdDraw.text(StdDraw.mouseX(), StdDraw.mouseY(), "Bomb Tower selected (60g).");
+			StdDraw.show();
 			break;
 		case 'e':
 			//	System.out.println("Evolution selected (40g).");
+			StdDraw.clear(StdDraw.YELLOW_GREEN);
+			StdDraw.text(StdDraw.mouseX(), StdDraw.mouseY(), "Evolution selected (40g).");
+			StdDraw.show();
 			break;
 		case 's':
 			//	System.out.println("Starting game!");
+			StdDraw.clear(StdDraw.YELLOW_GREEN);
+			StdDraw.text(0.5, 0.5, "Starting game!");
+			StdDraw.show();
+			break;
 		case 'q':
 			//System.out.println("Exiting.");
+			StdDraw.clear(StdDraw.YELLOW_GREEN);
+			StdDraw.text(0.5, 0.5, "Exiting.");
+			StdDraw.show();
 		}
 	}
 
@@ -279,9 +306,13 @@ public class World {
 		//System.out.println("Click on the grass to build it.");
 		//System.out.println("Press S to start.");
 	}
-	public void menu(char c) 
+	public void menu() 
 	{
-
+		StdDraw.clear(StdDraw.BLACK);
+		StdDraw.setPenColor(StdDraw.RED);
+		StdDraw.setPenRadius(0.03);
+		StdDraw.text(0.5,0.5, "azul");
+		StdDraw.show();
 	}
 
 	/**
@@ -306,4 +337,5 @@ public class World {
 			StdDraw.pause(20);			
 		}
 	}
+
 }

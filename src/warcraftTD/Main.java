@@ -3,12 +3,12 @@ package warcraftTD;
 public class Main {
 
 	public static void main(String[] args) {
-		int width = 1200; //1200
+		int width = 1300; //1200
 		int height = 650; //650
-		int nbSquareX = 55; //11
-		int nbSquareY = 55; //11
-		int startX = 1; //1
-		int startY = 54;	//10	
+		int nbSquareX = 25; //11 //55
+		int nbSquareY = 25; //11  //55
+		int startX = 1; //1  //1
+		int startY = 24;	//10  //54	
 		//StdDraw.setXscale(0, 1);
 		//StdDraw.setYscale(0, 1);
 		World w = new World(width, height, nbSquareX, nbSquareY, startX, startY);
@@ -20,7 +20,7 @@ public class Main {
 		w.monsters.add(monster);
 		// Lancement de la boucle principale du jeu
 		w.run();
-		//w.game();
+	//	w.menu();
 		//w.drawBackground();
 	}
 }

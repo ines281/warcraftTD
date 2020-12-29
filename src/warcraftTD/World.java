@@ -10,14 +10,14 @@ import java.util.Iterator;
 public class World {
 	// l'ensemble des monstres, pour gerer (notamment) l'affichage
 	List<Monster> monsters = new ArrayList<Monster>();
-	
+
 	//???????????????L'ensembles des tours crees ???????????????????????????????????????????????????
 	static ArrayList<TourArcher> ta = new ArrayList<TourArcher>();
-	static ArrayList<ToureBombe> tb = new ArrayList<ToureBombe>();
-	 
+	static ArrayList<TourBombe> tb = new ArrayList<TourBombe>();
+
 	// Position par laquelle les monstres vont venir
 	Position spawn;
-	
+
 	// Information sur la taille du plateau de jeu
 	int width;
 	int height;
@@ -25,16 +25,16 @@ public class World {
 	int nbSquareY;
 	double squareWidth;
 	double squareHeight;
-	
+
 	// Nombre de points de vie du joueur
 	int life = 20;
-	
+
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	char key;
-	
+
 	// Condition pour terminer la partie
 	boolean end = false;
-	
+
 	/**
 	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de cases données
 	 * @param width
@@ -55,87 +55,79 @@ public class World {
 		StdDraw.setCanvasSize(width, height);
 		StdDraw.enableDoubleBuffering();
 	}
-	
+
 	/**
 	 * Définit le décors du plateau de jeu.
 	 */
-	 public void drawBackground() {	
-		 for (int i = 0; i < nbSquareX; i++)
-			 for (int j = 0; j < nbSquareY; j++) 
-				//StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, squareWidth , squareHeight);
-				 StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "images/grass.png", squareWidth, squareHeight);
-			  StdDraw.show();
-	 }
-	 
-	 /**
-	  * Initialise le chemin sur la position du point de départ des monstres. Cette fonction permet d'afficher une route qui sera différente du décors.
-	  */
-	 public void drawPath() {
-		 ArrayList<Position> pos = new ArrayList<Position>();
-		 Position p = new Position(spawn);
-		 StdDraw.setPenColor(StdDraw.DARK_GRAY);
-		 StdDraw.setPenRadius(0.05);
-		 StdDraw.filledRectangle(p.x, p.y, squareWidth / 2, squareHeight / 2);
-		 //?????????????????????????????????????????????????????????????????????????????????????????????
-		 Position p1 = new Position(spawn.x,spawn.y-0.5);
-		 Position p2 = new Position(p1.x+0.9,p1.y);
-		 Position p3 = new Position(p2.x,p2.y-0.4788);
-		 pos.add(spawn);
-		 pos.add(p1); pos.add(p2); pos.add(p3);
-		 StdDraw.filledRectangle(p1.x,p1.y, squareWidth / 2, squareWidth / 2);
-		 StdDraw.filledRectangle(p2.x,p2.y, squareWidth / 2, squareHeight / 2);
-		 StdDraw.filledRectangle(p3.x,p3.y, squareWidth / 2, squareHeight / 2);
-		 //?????????????????????????????????????????????????????????????????????????????????????????????
-		// StdDraw.picture(spawn.x, spawn.y, "images/DirtTile.png", spawn.x, spawn.y);
-		// StdDraw.picture((p2.x+p1.x)/2, p1.y, "images/DirtTile.png", p2.x-p1.x, 0.05);
-		/* for(int i = 0 ;i<3;i++) {
-			// StdDraw.line(pos.get(i).x, pos.get(i).y, pos.get(i+1).x, pos.get(i+1).y);
-			//StdDraw.picture(pos.get(i).x, pos.get(i).y, "images/DirtTile.png", pos.get(i+1).x - pos.get(i).x, pos.get(i).y - pos.get(i+1).y);
-			 StdDraw.picture(pos.get(i).x, pos.get(i).y, "images/DirtTile.png",squareWidth,squareHeight);
-		 }*/
-			for(int i = 0 ;i<3;i++) // donc spawn -> p1 -> p2 -> p3
-			{
-				System.out.println("aqlagh da");
-				if(pos.get(i).x!= pos.get(i+1).x) // ils sont sur la meme ligne verticale
-				{
-					System.out.println("x dif");
-					for(double x = Position.minX(pos.get(i),pos.get(i+1)); x <= Position.maxX(pos.get(i),pos.get(i+1)) ; x+= squareWidth)
-					{
-						//System.out.println(x);
-						StdDraw.picture(x, pos.get(i).y, "images/DirtTile.png",squareWidth,squareHeight);
-					}
-				}
-				if(pos.get(i).y!= pos.get(i+1).y) // ils sont sur la meme ligne horizentale 
-				{
-					System.out.println("y dif");
-					for(double x = Position.maxY(pos.get(i),pos.get(i+1)); x >= Position.minY(pos.get(i),pos.get(i+1));x -= squareHeight)
-					{
-						 StdDraw.picture(pos.get(i).x, x, "images/DirtTile.png",squareHeight,squareWidth);
-					}
-				}
-				
+	public void drawBackground() {	
+		for (int i = 0; i < nbSquareX; i++)
+			for (int j = 0; j < nbSquareY; j++) 
+				StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "images/grass.png", squareWidth, squareHeight);
+		// StdDraw.show();
 	}
-	 }
-	 
-	 /**
-	  * Affiche certaines informations sur l'écran telles que les points de vie du joueur ou son or
-	  */
-	 public void drawInfos() {
-		 StdDraw.setPenColor(StdDraw.BLACK);
-	 }
-	 
-	 /**
-	  * Fonction qui récupère le positionnement de la souris et permet d'afficher une image de tour en temps réél
-	  *	lorsque le joueur appuie sur une des touches permettant la construction d'une tour.
-	  */
-	 public void drawMouse() {
-	
+
+	/**
+	 * Initialise le chemin sur la position du point de départ des monstres. Cette fonction permet d'afficher une route qui sera différente du décors.
+	 */
+	public void drawPath() {
+		ArrayList<Position> pos = new ArrayList<Position>();
+		StdDraw.setPenColor(StdDraw.RED);
+		StdDraw.setPenRadius(0.05);
+		//?????????????????????????????????????????????????????????????????????????????????????????????
+		Position p1 = new Position(spawn.x,spawn.y-0.5);
+		Position p2 = new Position(p1.x+0.9,p1.y);
+		Position p3 = new Position(p2.x,p2.y-0.4788);
+		pos.add(spawn);
+		pos.add(p1); pos.add(p2); pos.add(p3);
+		for(int i = 0 ; i<3 ;i++) // donc spawn -> p1 -> p2 -> p3
+		{
+			if(pos.get(i).x!= pos.get(i+1).x) // ils sont sur la meme ligne verticale
+			{
+				for(double x = Position.minX(pos.get(i),pos.get(i+1)); x <= Position.maxX(pos.get(i),pos.get(i+1)) ; x+= squareWidth)
+				{
+					StdDraw.picture(x, pos.get(i).y, "images/DirtTile.png",squareWidth,squareHeight);
+				}
+			}
+			if(pos.get(i).y!= pos.get(i+1).y) // ils sont sur la meme ligne horizentale 
+			{
+				for(double x = Position.maxY(pos.get(i),pos.get(i+1)); x >= Position.minY(pos.get(i),pos.get(i+1));x -= squareHeight)
+				{
+					StdDraw.picture(pos.get(i).x, x, "images/DirtTile.png",squareWidth,squareHeight);
+				}
+			}
+
+		}
+		StdDraw.setPenColor(StdDraw.RED);
+		StdDraw.filledRectangle(spawn.x, spawn.y, squareWidth / 2, squareHeight / 2);
+		StdDraw.setPenColor(StdDraw.BLUE);
+		StdDraw.filledRectangle(p3.x,p3.y, squareWidth / 2, squareHeight / 2);
+	}
+
+	/**
+	 * Affiche certaines informations sur l'écran telles que les points de vie du joueur ou son or
+	 */
+	public void drawInfos() {
+		//Pour dessiner les points de vie
+		StdDraw.setPenColor(StdDraw.BOOK_RED);
+		double lifePer = (double)life/100; 
+		StdDraw.picture(0.007, 0.1, "images/heart2.png",squareWidth,squareHeight);
+		StdDraw.filledRectangle(0.02+lifePer, 0.1, lifePer , 0.01);
+		//TODO UNE BOUCLE QUI DIMINUE LE NB DE POINTS DE VIE
+		//Pour dessiner le nb d'or
+	}
+
+	/**
+	 * Fonction qui récupère le positionnement de la souris et permet d'afficher une image de tour en temps réél
+	 *	lorsque le joueur appuie sur une des touches permettant la construction d'une tour.
+	 */
+	public void drawMouse() {
+
 		double normalizedX = (int)(StdDraw.mouseX() / squareWidth) * squareWidth + squareWidth / 2;
 		double normalizedY = (int)(StdDraw.mouseY() / squareHeight) * squareHeight + squareHeight / 2;
 		String image = null;
 		switch (key) {
 		case 'a' : 
-			 // TODO Ajouter une image pour représenter une tour d'archers
+			// TODO Ajouter une image pour représenter une tour d'archers
 		{
 			StdDraw.picture(normalizedX, normalizedY, "images/ARCHER SIMPLE.jpg",0.06,0.06);
 			if(StdDraw.isClicked == true ) {
@@ -143,77 +135,77 @@ public class World {
 				ta.add(t);
 				drawTower('a');
 			}
-			 break;
+			break;
 		}
 		case 'b' :
 		{
 			// TODO Ajouter une image pour représenter une tour à canon
-			 StdDraw.picture(normalizedX, normalizedY, "images/BOMBE SIMPLE.jpg",0.06,0.06);
-				if(StdDraw.isClicked == true ) {
-					ToureBombe t = new ToureBombe(new Position(StdDraw.newX,StdDraw.newY));
-					tb.add(t);
-					drawTower('b');
-				}
-			 break;
+			StdDraw.picture(normalizedX, normalizedY, "images/BOMBE SIMPLE.jpg",0.06,0.06);
+			if(StdDraw.isClicked == true ) {
+				TourBombe t = new TourBombe(new Position(StdDraw.newX,StdDraw.newY));
+				tb.add(t);
+				drawTower('b');
+			}
+			break;
 		}
 		}
-		 if (image != null)
-			 StdDraw.picture(normalizedX, normalizedY, image, squareWidth, squareHeight);
-	 }
-/*
- * ????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
- */
-	 public static void drawTower(char c) 
-	 {
-		 if(c=='a') 
-		 {
-			 for(TourArcher t: ta) 
-			 {
-				 StdDraw.picture(t.getP().x, t.getP().y, "images/ARCHER SIMPLE.jpg",0.06,0.06);
-			 }
+		if (image != null)
+			StdDraw.picture(normalizedX, normalizedY, image, squareWidth, squareHeight);
+	}
+	/*
+	 * ????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+	 */
+	public static void drawTower(char c) 
+	{
+		if(c=='a') 
+		{
+			for(TourArcher t: ta) 
+			{
+				StdDraw.picture(t.getP().x, t.getP().y, "images/ARCHER SIMPLE.jpg",0.06,0.06);
+			}
 			// StdDraw.show(); 
-		 }
-		 if(c=='b') 
-		 {
-			 for(ToureBombe t: tb) 
-			 {
-				 StdDraw.picture(t.getP().x, t.getP().y, "images/BOMBE SIMPLE.jpg",0.06,0.06);
-			 }
-		 }
-		 else 
-		 {
-			 for(TourArcher t: ta) 
-			 {
-				 StdDraw.picture(t.getP().x, t.getP().y, "images/ARCHER SIMPLE.jpg" ,0.06,0.06);
-			 }
-			 for(ToureBombe t: tb) 
-			 {
-				 StdDraw.picture(t.getP().x, t.getP().y, "images/BOMBE SIMPLE.jpg",0.06,0.06);
-			 }
-		 }
-	 }
-	 /**
-	  * Pour chaque monstre de la liste de monstres de la vague, utilise la fonction update() qui appelle les fonctions run() et draw() de Monster.
-	  * Modifie la position du monstre au cours du temps à l'aide du paramètre nextP.
-	  */
-	 public void updateMonsters() {
-	 
+		}
+		if(c=='b') 
+		{
+			for(TourBombe t: tb) 
+			{
+				StdDraw.picture(t.getP().x, t.getP().y, "images/BOMBE SIMPLE.jpg",0.06,0.06);
+			}
+		}
+		else 
+		{
+			for(TourArcher t: ta) 
+			{
+				StdDraw.picture(t.getP().x, t.getP().y, "images/ARCHER SIMPLE.jpg" ,0.06,0.06);
+			}
+			for(TourBombe t: tb) 
+			{
+				StdDraw.picture(t.getP().x, t.getP().y, "images/BOMBE SIMPLE.jpg",0.06,0.06);
+			}
+		}
+	}
+	/**
+	 * Pour chaque monstre de la liste de monstres de la vague, utilise la fonction update() qui appelle les fonctions run() et draw() de Monster.
+	 * Modifie la position du monstre au cours du temps à l'aide du paramètre nextP.
+	 */
+	public void updateMonsters() {
+
 		Iterator<Monster> i = monsters.iterator();
 		Monster m;
 		while (i.hasNext()) {
-			 m = i.next();
-			 m.update();
-			 if(m.p.y < 0) {
-				 m.p.y = 1;
-			 }
-		 }
-	 }
-	 
-	 /**
-	  * Met à jour toutes les informations du plateau de jeu ainsi que les déplacements des monstres et les attaques des tours.
-	  * @return les points de vie restants du joueur
-	  */
-	 public int update() {
+			m = i.next();
+			m.update();
+			if(m.p.y < 0) {
+				m.p.y = 1;
+			}
+		}
+	}
+
+	/**
+	 * Met à jour toutes les informations du plateau de jeu ainsi que les déplacements des monstres et les attaques des tours.
+	 * @return les points de vie restants du joueur
+	 */
+	public int update() {
 		drawBackground();
 		drawPath();
 		drawInfos();
@@ -222,7 +214,7 @@ public class World {
 		//?????????????????????????????????????,YEEEEES
 		drawTower(' ');
 		return life;
-	 }
+	}
 
 	/**
 	 * Récupère la touche appuyée par l'utilisateur et affiche les informations pour la touche séléctionnée
@@ -231,23 +223,26 @@ public class World {
 	public void keyPress(char key) {
 		key = Character.toLowerCase(key);
 		this.key = key;
+		StdDraw.setPenColor(StdDraw.BLACK);
 		switch (key) {
 		case 'a':
-		//	System.out.println("Arrow Tower selected (50g).");
+			//	System.out.println("Arrow Tower selected (50g).");
+			StdDraw.text(StdDraw.mouseX(), StdDraw.mouseY(), "Arrow Tower selected (50g).");
+			StdDraw.show();
 			break;
 		case 'b':
-		//	System.out.println("Bomb Tower selected (60g).");
+			//	System.out.println("Bomb Tower selected (60g).");
 			break;
 		case 'e':
-		//	System.out.println("Evolution selected (40g).");
+			//	System.out.println("Evolution selected (40g).");
 			break;
 		case 's':
-		//	System.out.println("Starting game!");
+			//	System.out.println("Starting game!");
 		case 'q':
-		//System.out.println("Exiting.");
+			//System.out.println("Exiting.");
 		}
 	}
-	
+
 	/**
 	 * Vérifie lorsque l'utilisateur clique sur sa souris qu'il peut: 
 	 * 		- Ajouter une tour à la position indiquée par la souris.
@@ -272,7 +267,7 @@ public class World {
 			break;
 		}
 	}
-	
+
 	/**
 	 * Comme son nom l'indique, cette fonction permet d'afficher dans le terminal les différentes possibilités 
 	 * offertes au joueur pour intéragir avec le clavier
@@ -284,24 +279,28 @@ public class World {
 		//System.out.println("Click on the grass to build it.");
 		//System.out.println("Press S to start.");
 	}
-	
+	public void menu(char c) 
+	{
+
+	}
+
 	/**
 	 * Récupère la touche entrée au clavier ainsi que la position de la souris et met à jour le plateau en fonction de ces interractions
 	 */
 	public void run() {
 		printCommands();
 		while(!end) {
-			
+
 			StdDraw.clear();
 			if (StdDraw.hasNextKeyTyped()) {
 				keyPress(StdDraw.nextKeyTyped());
 			}
-			
+
 			if (StdDraw.isMousePressed()) {
 				mouseClick(StdDraw.mouseX(), StdDraw.mouseY());
 				StdDraw.pause(50);
 			}
-			
+
 			update();
 			StdDraw.show();
 			StdDraw.pause(20);			

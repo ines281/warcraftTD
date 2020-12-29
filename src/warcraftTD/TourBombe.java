@@ -1,7 +1,6 @@
 package warcraftTD;
 
-public class ToureBombe extends Tours {
-	
+public class TourBombe extends Tours {
 	/*
 	 * Tour de bombes :
 – La tour de bombes coûte 60 pièces d’or.
@@ -25,7 +24,7 @@ que les cibles terrestres. Les flèches font 2 points de dégâts et se déplacent d
 tandis que les bombes font 8 points de dégâts pour une vitesse de déplacement de 0.02
 	 */
 	private enum cible {aérienne};
-	public ToureBombe(Position p) {
+	public TourBombe(Position p) {
 		super(60, 20, 0.2, p);
 	}
 

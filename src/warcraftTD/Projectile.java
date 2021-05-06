@@ -1,30 +1,17 @@
 package warcraftTD;
 
-public abstract class Monster {
-	// Position du monstre à l'instant t
+public abstract class Projectile {
 	Position p;
-	// Vitesse du monstre
-	double speed;
-	// Position du monstre à l'instant t+1
 	Position nextP;
-	// Boolean pour savoir si le monstre à atteint le chateau du joueur
-	boolean reached;
-	// Compteur de déplacement pour savoir si le monstre à atteint le chateau du joueur
-	int checkpoint = 0;
-	int recompense ;
-	int pointDeVie;
-	double r = 0.01;
-	//hitbox (la hitbox est le monstre ._. on fais une collison entre le projectile (rectangle) et le monstre (cercle) ) 
-	//double x;
-	//double y;
-	public Monster(Position p) {
+	Double speed = 0.0;
+	double w = 0.02;
+	double h = 0.005;
+	int degat;
+	public Projectile(Position p) {
+		super();
 		this.p = p;
 		this.nextP = new Position(p);
-		reached = false;
-	//	x = p.x;
-	//	y= p.y;
 	}
-	
 	/**
 	 * Déplace le monstre en fonction de sa vitesse sur l'axe des x et des y et de sa prochaine position.
 	 */
@@ -44,12 +31,10 @@ public abstract class Monster {
 	public void update() {
 		move();
 		draw();
-		checkpoint++;
-		//System.out.println("update base monster");
 	}
 	
 	/**
 	 * Fonction abstraite qui sera instanciée dans les classes filles pour afficher le monstre sur le plateau de jeu.
 	 */
-	public abstract void draw();
+	public  abstract void draw();
 }

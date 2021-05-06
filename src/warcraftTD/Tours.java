@@ -2,37 +2,38 @@ package warcraftTD;
 
 public abstract class Tours {
 	private int cout;
-	private double vistesse;
+	private double vitesse;
 	private double portee;
 	// Position de la tour a l'instant t
 	private	Position p;
+	//Case ou se trouve la tour !!
+	int caseX;
+	int caseY;
 	//private enum cible {aeriennes,terrestres}
-	public Tours(int cout, double vistesse, double portee,Position p) {
+	public Tours(int cout, double vitesse, double portee,Position p,int caseX, int caseY) {
 		super();
 		this.setCout(cout);
-		this.setVistesse(vistesse);
+		this.setvitesse(vitesse);
 		this.setPortee(portee);
 		this.setP(p);
+		this.caseX = caseX;
+		this.caseY = caseY;
 	}
-	
+
 	public abstract void update();
-	
-	/**
-	 * Fonction abstraite qui sera instancie dans les classes filles pour afficher la tour sur le plateau de jeu.
-	 */
-	public abstract void draw();
-	
+
+
 	public int getCout() {
 		return cout;
 	}
 	public void setCout(int cout) {
 		this.cout = cout;
 	}
-	public double getVistesse() {
-		return vistesse;
+	public double getvitesse() {
+		return vitesse;
 	}
-	public void setVistesse(double vistesse) {
-		this.vistesse = vistesse;
+	public void setvitesse(double vitesse) {
+		this.vitesse = vitesse;
 	}
 	public double getPortee() {
 		return portee;
@@ -51,7 +52,10 @@ public abstract class Tours {
 
 	@Override
 	public String toString() {
-		return "Tours [cout=" + cout + ", vistesse=" + vistesse + ", portee=" + portee + ", p=" + p + "]";
-	};
-	
+		return "Tours [cout=" + cout + ", vitesse=" + vitesse + ", portee=" + portee + ", p=" + p + "]";
+	}
+	public abstract boolean canFire();
+	//refait dans la classe world !!!!!!!
+	/*public abstract void checkTarget(Monster m,double squareWidth,double squareHeight,int nbSquareY);
+	public abstract void fire(ArrayList<Projectile> projectile,Position p ,Position nextP) ;*/
 }

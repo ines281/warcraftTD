@@ -1729,30 +1729,9 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * This method cannot be called directly.
      */
- //§!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    static Position p;
-     static boolean isClicked = false;
-    static double newX = -1;
-     static double newY = -1;
     @Override
     public void mouseClicked(MouseEvent e) {
         // this body is intentionally left empty
-    	
-    	synchronized(mouseLock) {
-    		newX = -1; newX = -1;
-    		isClicked = true; isMousePressed = true;
-    		//if(StdDraw)
-    		newX = StdDraw.userX(e.getX());
-    		newY = StdDraw.userY(e.getY());
-            p = new Position(newX,newY);
-          //  System.out.println(p);
-          //  World.ta.add(new TourArcher(p));     
-          /*  for(TourArcher t : World.ta) {
-            	System.out.println(t.toString());
-            }
-          World.drawTower();*/
-    	}
-    	
     }
 
     /**
@@ -1766,14 +1745,9 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * This method cannot be called directly.
      */
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     @Override
     public void mouseExited(MouseEvent e) {
         // this body is intentionally left empty
-    	synchronized(mouseLock) {
-            isMousePressed = false;	
-            isClicked = false;
-    	}
     }
 
     /**
@@ -1795,7 +1769,6 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     public void mouseReleased(MouseEvent e) {
         synchronized (mouseLock) {
             isMousePressed = false;
-            isClicked = false;
         }
     }
 

@@ -68,5 +68,4 @@ public class Position {
 		if(p1.y < p2.y) return p1.y;
 		else return p2.y;		
 	}
-	
 }
